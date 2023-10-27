@@ -2,25 +2,30 @@
 import "./styles.css"
 import { useState } from "react";
 
-const defaultTodos = [];
+
+
+const mockDatabase = ["conor13", "ben43", "ben13", "micheal47", "micehal43"]; 
+const defaultUsernames = [];
 
 function UsernameForm() {
   const [inputValue, setInputValue] = useState("");
-  const [todos, setTodos] = useState(defaultTodos);
+  const [username, setUsername] = useState(defaultUsernames);
   
   function handleChange(event) {
     setInputValue(event.target.value);
   }
 
   function handleAddClick(){
-    if (inputValue !== "") {
-      setTodos([...todos, inputValue]);
+    if (inputValue !== "" && mockDatabase.includes(inputValue)) {
+      setUsername([...username, inputValue]);
       setInputValue("");
+    } else { 
+      alert("There is no such username under this name");
     }
   }
 
-  function deleteTodo(index) {
-    setTodos(todos.filter((todo , i) => i !== index))
+  function deleteUsername(index) {
+    setUsername(username.filter((todo , i) => i !== index))
   }
 
   return (
@@ -40,10 +45,10 @@ function UsernameForm() {
         </button>
 
        <ul className = "username-List">
-        {todos.map((todo, i) => 
+        {username.map((username, i) => 
         <li key={i} className = "list-of-usernames">
-        {todo}{""}
-        <button type="button" onClick={() => deleteTodo(i)} className = "delete-button">
+        {username}{""}
+        <button type="button" onClick={() => deleteUsername(i)} className = "delete-button">
         Delete
         </button>
         </li>
