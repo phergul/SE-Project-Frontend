@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -12,8 +12,8 @@ const firebaseConfig = {
     measurementId: "G-PFWP2VWSWJ"
   };
 
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
 //firebase auth and db references
-const auth = getAuth();
-const db = getFirestore();
+const auth = getAuth(app);
+const db = getFirestore(app);

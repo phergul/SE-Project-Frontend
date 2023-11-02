@@ -1,11 +1,17 @@
-const signupForm = document.querySelector('');
-signupForm.addEventListener('submit', (e) => {
-    //prevent refresh on submit
-    e.preventDefault();
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
-    //get the users info
+//get user info here...
 
 
-    //signup with firebase
-    auth.createUserWithEmailAndPassword(email, password)
-})
+const auth = getAuth();
+createUserWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed up 
+    const user = userCredential.user;
+    // ...
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // ..
+  });
