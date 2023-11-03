@@ -1,5 +1,5 @@
 
-import "./styles.css"
+import "../styles.css"
 import { useState } from "react";
 
 
@@ -7,7 +7,7 @@ import { useState } from "react";
 const mockDatabase = ["conor13", "ben43", "ben13", "micheal47", "micehal43"]; 
 const defaultUsernames = [];
 
-function UsernameForm() {
+export default function UsernameForm() {
   const [inputValue, setInputValue] = useState("");
   const [username, setUsername] = useState(defaultUsernames);
   
@@ -57,11 +57,5 @@ function UsernameForm() {
       
 
       </div>
-     
-    
   );
 }
-
-export default UsernameForm;
-
-
