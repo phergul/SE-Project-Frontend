@@ -1,9 +1,10 @@
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./firebase_setup/firebase";
 
-//get user info here...
+//get user info and check validity
 
+//check validity (backend)
 
-const auth = getAuth();
 createUserWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     // Signed up 

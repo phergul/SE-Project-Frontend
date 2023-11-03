@@ -10,10 +10,17 @@
 const {onRequest} = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
 
-// Create and deploy your first functions
-// https://firebase.google.com/docs/functions/get-started
+exports.validateEmailAddress = functions.https.onRequest((req, res) => {
 
-// exports.helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+    // Get the email address from the request body.
+    const emailAddress = req.body.emailAddress
+    
+    // Validate the email address.
+    const isValid =  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(emailAddress);
+    
+    // If the email address is valid, return a success response.
+    if (isValid) { res.sendStatus(200); } else {
+        // If the email address is not valid, return an error response.
+        res.sendStatus(400); 
+    }
+});
