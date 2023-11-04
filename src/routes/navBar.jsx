@@ -1,4 +1,4 @@
-import "/Users/bennaughton/Desktop/Folders/SE-Project-Frontend/src/styles.css"
+import "../styles.css"
 import { Link } from 'react-router-dom'
 
 

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './LoginSignup.css';
+import { signUP } from '../scripts/auth_signup.js';
 
 const LoginSignup = () => {
   const [formData, setFormData] = useState({
@@ -15,13 +16,14 @@ const LoginSignup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    //signUP function from scripts folder
+    signUP(formData.email, formData.password, formData.username);
   };
 
   return (
     <div className="login-signup-box">
       <h1 className="login-signup-header">Sign Up</h1>
-      <form onSubmit={handleSubmit}>
+      <form id="123" onSubmit={handleSubmit}>
 
         <div className="inputs">
           <label htmlFor="username">Username</label>
