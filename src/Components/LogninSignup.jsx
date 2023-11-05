@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './LoginSignup.css';
-import { signUP } from '../scripts/auth_signup.js';
+import { signUP } from '../scripts/auth.js';
 
 const LoginSignup = () => {
   const [formData, setFormData] = useState({
@@ -23,7 +23,7 @@ const LoginSignup = () => {
   return (
     <div className="login-signup-box">
       <h1 className="login-signup-header">Sign Up</h1>
-      <form id="123" onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
 
         <div className="inputs">
           <label htmlFor="username">Username</label>
