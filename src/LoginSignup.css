@@ -1,0 +1,145 @@
+/* LoginSignup.css */
+
+.login-signup-box {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.login-signup-header {
+  text-align: center;
+  color: #333;
+  margin-bottom: 1.5rem;
+}
+
+.inputs {
+  margin-bottom: 1rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #666;
+}
+
+.forgot-password {
+  text-align: right;
+  margin-bottom: 1.5rem;
+}
+
+.forgot-password span {
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.submit-btns {
+  text-align: center;
+}
+
+.submit {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+.submit:hover {
+  background-color: #0056b3;
+}
+
+/* Add any media queries below to make the form responsive */
+@media (max-width: 768px) {
+  .login-signup-box {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  .submit {
+    width: 100%;
+    padding: 10px 0;
+  }
+}
+
+.toggle-view {
+  background-color: #f8f9fa; /* Light gray background */
+  color: #6c757d; /* Dark gray text */
+  border: 1px solid #ddd; /* Slight border to emphasize the button */
+  margin-top: 10px; /* Spacing from the submit button */
+}
+
+.toggle-view:hover {
+  background-color: #e2e6ea; /* Darken background on hover */
+  border-color: #dae0e5; /* Darken border on hover */
+}
+
+/* ForgotPassword.css */
+
+.forgot-password-page {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.forgot-password-page h2 {
+  text-align: center;
+}
+
+.forgot-password-page form {
+  display: flex;
+  flex-direction: column;
+}
+
+.forgot-password-page input {
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.forgot-password-page button {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.forgot-password-page button:hover {
+  background-color: #0056b3;
+}
+
+
+
+  
+  

@@ -8,12 +8,22 @@ import Login from "./routes/login";
 import Root from "./routes/root";
 import AddFriendPage from "./routes/addfriend";
 import ErrorPage from "./error";
+import ForgotPassword from "./routes/ForgotPassword";
+/*import Sidebar from "./Components/Sidebar";*/
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
     errorElement: <ErrorPage />,
+  
+    
+    /*children: [
+       {
+        path: "sidebar", 
+        element: <Sidebar /> 
+      }
+    ]*/
   },
   {
     path: "addfriend",
@@ -22,7 +32,12 @@ const router = createBrowserRouter([
   {
     path: "login",
     element: <Login />
-  }
+  },
+  {
+    path: "forgotpassword",
+    element: <ForgotPassword />
+}
+
 ]);
 
 

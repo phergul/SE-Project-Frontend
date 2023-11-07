@@ -1,8 +1,12 @@
 import { useState } from 'react';
-import './LoginSignup.css';
-import { signUP } from '../scripts/auth.js';
+import { useNavigate } from 'react-router-dom';
+import '../LoginSignup.css';
+import '../routes/ForgotPassword';
 
 const LoginSignup = () => {
+  
+  const navigate = useNavigate();
+  const [isLoginView, setIsLoginView] = useState(false); 
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -13,28 +17,40 @@ const LoginSignup = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    //signUP function from scripts folder
-    signUP(formData.email, formData.password, formData.username);
+   
+  };        
+
+  const handleForgotPassword = () => {
+    navigate("/ForgotPassword");
+  }
+
+  const toggleView = () => {
+    setIsLoginView(!isLoginView); 
   };
 
   return (
     <div className="login-signup-box">
-      <h1 className="login-signup-header">Sign Up</h1>
+      <h1 className="login-signup-header">{isLoginView ? 'Login' : 'Sign Up'}</h1>
       <form onSubmit={handleSubmit}>
 
-        <div className="inputs">
-          <label htmlFor="username">Username</label>
-          <input 
-            type="text" 
-            name="username" 
-            id="username"
-            value={formData.username}
-            onChange={handleChange} 
-          />
+        {/* Include username only if it's sign-up view */}
+        {!isLoginView && (
+          <div className="inputs">
+            <label htmlFor="username">Username</label>
+            <input 
+              type="text" 
+              name="username" 
+              id="username"
+              value={formData.username}
+              onChange={handleChange} 
+            />
+          </div>
+        )}
 
+        <div className="inputs">
           <label htmlFor="email">Email</label>
           <input 
             type="email" 
@@ -43,7 +59,9 @@ const LoginSignup = () => {
             value={formData.email}
             onChange={handleChange} 
           />
+        </div>
 
+        <div className="inputs">
           <label htmlFor="password">Password</label>
           <input 
             type="password" 
@@ -55,11 +73,15 @@ const LoginSignup = () => {
         </div>
 
         <div className="forgot-password">
-          Forgot Password? <span>Click here!</span>
+          Forgot Password? <span onClick={handleForgotPassword}>Click here!</span>
         </div>
 
         <div className="submit-btns">
-          <button type="submit" className="submit">Sign Up</button>
+          <button type="submit" className="submit">{isLoginView ? 'Login' : 'Sign Up'}</button>
+          {/* Toggle between views */}
+          <button type="button" onClick={toggleView} className="toggle-view">
+            {isLoginView ? 'Create an account' : 'Have an account? Login'}
+          </button>
         </div>
 
       </form>

@@ -1,0 +1,30 @@
+/* Sidebar.css */
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Aligns buttons to the start (left) */
+    justify-content: flex-start; /* Aligns items to the top */
+    width: 33.3333%; /* Takes up 1/3 of the page width */
+    min-height: calc(100vh - 60px); /* Adjust the 60px based on your navbar height */
+    padding: 10px; /* Add some padding */
+    box-sizing: border-box; /* Include padding in the width and height */
+    position: fixed; /* Sidebar stays fixed while scrolling */
+    top: 60px; /* Adjust based on your navbar height */
+    left: 0;
+    background-color: #f4f4f4; /* Give it a background color */
+    overflow-y: auto; /* Add scroll if content overflows */
+  }
+  
+  .sidebar-btn {
+    margin-bottom: 10px; /* Space between buttons */
+    padding: 10px 20px;
+    width: 100%; /* Full width of the sidebar */
+    box-sizing: border-box; /* Include padding in the width */
+  }
+  
+  /* Additional styles for the button */
+  .sidebar-btn:hover {
+    background-color: #e0e0e0;
+  }
+  
