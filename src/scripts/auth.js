@@ -1,12 +1,13 @@
 // this file will export every function relating to firebase's authentication
 
-import { auth } from "../firebase_config/firebase";
+import { auth, db } from "../firebase_config/firebase";
 import { 
     createUserWithEmailAndPassword, 
     signInWithEmailAndPassword, 
     signOut,
     onAuthStateChanged
 } from "firebase/auth";
+import { doc,  setDoc } from "firebase/firestore";
 
 //creates a new user in auth
 export const signUP = (email, password, username) => {
@@ -16,6 +17,12 @@ export const signUP = (email, password, username) => {
             const user = userCredential.user;
             //add display name
             userCredential.user.displayName = username;
+            //update displayName in users collection
+            /*
+                NOT WORKING
+            */
+            const userRef = doc(db, 'users', user.uid);
+            setDoc(userRef, { displayName: user.displayName }, { merge: true })
         })
         .catch((error) => {
             const errorCode = error.code;
