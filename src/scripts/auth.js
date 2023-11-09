@@ -18,17 +18,12 @@ export const signUP = (email, password, username) => {
             //add display name
             userCredential.user.displayName = username;
             //update displayName in users collection
-            /*
-                NOT WORKING
-            */
             const userRef = doc(db, 'users', user.uid);
-            setDoc(userRef, { displayName: user.displayName }, { merge: true })
+            setDoc(userRef, { displayName: user.displayName, }, { merge: true });
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            //i dont know how to show the error message back to the page. (e.g. if email already has account)
-            //could return them from the function call maybe
         });
 }
 

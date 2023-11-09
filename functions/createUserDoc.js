@@ -5,7 +5,7 @@ admin.initializeApp();
 // Firestore reference
 const firestore = admin.firestore();
 
-exports.createUserDoc = functions.auth.user().onCreate((user) => {
+exports.createUserDoc = functions.auth.user().onCreate(async (user) => {
   const { uid, email } = user;
 
   //debug
