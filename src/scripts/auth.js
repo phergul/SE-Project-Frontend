@@ -15,11 +15,12 @@ export const signUP = (email, password, username) => {
         .then((userCredential) => {
             // Signed up 
             const user = userCredential.user;
-            //add display name
-            userCredential.user.displayName = username;
+            //add display name to authentication
+            user.displayName = username;
+            console.log(user);
             //update displayName in users collection
             const userRef = doc(db, 'users', user.uid);
-            setDoc(userRef, { displayName: user.displayName, }, { merge: true });
+            setDoc(userRef, { displayName: username }, { merge: true });
         })
         .catch((error) => {
             const errorCode = error.code;
