@@ -1,45 +1,46 @@
 
-import './Home.css'; // Make sure to create a Calendar.css file for styling
+import './Home.css'; 
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, isSameDay } from "date-fns";
+
+
+const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 const Calendar = () => {
-  // Assuming you want to show the current month
-  const today = new Date();
-  const currentYear = today.getFullYear();
-  const currentMonth = today.getMonth();
-  const currentDate = today.getDate();
+  
+const currentDate = new Date();
+const firstDayOfMonth = startOfMonth(currentDate);
+const lastDayOfMonth = endOfMonth(currentDate);
 
-  // Generate the days of the week header
-  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const daysHeader = daysOfWeek.map((day) => <th key={day}>{day}</th>);
+const daysInMonth = eachDayOfInterval({
+  start: firstDayOfMonth,
+  end: lastDayOfMonth,
+});
 
-  // Generate the days for the current month
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-  let days = [];
-  for (let i = 1; i <= daysInMonth; i++) {
-    const day = new Date(currentYear, currentMonth, i).getDay();
-    if (i === 1) {
-      
-      for (let j = 0; j < day; j++) {
-        days.push(<td key={`empty-${j}`}></td>);
-      }
-    }
-    days.push(<td key={i} className={i === currentDate ? 'current-day' : ''}>{i}</td>);
-  }
+const startingDayIndex = getDay(firstDayOfMonth);
 
-  // Group days into weeks for display
-  const weeks = [];
-  for (let i = 0; i < days.length; i += 7) {
-    weeks.push(<tr key={`week-${i}`}>{days.slice(i, i + 7)}</tr>);
-  }
-
-  return (
-    <table className="calendar">
-      <thead>
-        <tr>{daysHeader}</tr>
-      </thead>
-      <tbody>{weeks}</tbody>
-    </table>
-  );
-};
+  return ( 
+    <div className="container">
+        <div>
+            <h2 className="calendar-title">{format(currentDate, "MMMM yyyy")}</h2>
+        </div>
+        <div className="grid grid-cols-7 gap-2">
+          {WEEKDAYS.map((day) => {
+            return <div className='Days' key={day}>{day}</div>
+          })}
+          {Array.from({length: startingDayIndex }).map((_, index) => {
+            return <div key={`empty-${index}`} className='border-of-days'/>
+          })}
+          
+          {daysInMonth.map((day, index) => {
+            const isToday = isSameDay(day, new Date());
+            const dayClassName = isToday ?  "border-of-days today" : "border-of-days";
+            return <div key={index} className={dayClassName}>
+            {format(day, "d")}
+            </div>
+          })}
+        </div>
+    </div>
+);
+  };
 
 export default Calendar;

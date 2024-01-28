@@ -9,6 +9,7 @@ import Root from "./routes/root";
 import AddFriendPage from "./routes/addfriend";
 import ErrorPage from "./error";
 import ForgotPassword from "./routes/ForgotPassword";
+import Calendar from "./Components/Calender";
 /*import Sidebar from "./Components/Sidebar";*/
 
 const router = createBrowserRouter([
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
   {
     path: "forgotpassword",
     element: <ForgotPassword />
+},
+{
+  path: "Calendar",
+  element: <Calendar />
 }
 
 ]);
