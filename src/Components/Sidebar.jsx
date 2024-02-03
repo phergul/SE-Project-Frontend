@@ -2,7 +2,8 @@
 import './Home.css';
 import { useState } from 'react';
 
-const Sidebar = () => {
+
+const Sidebar = (onAddTask) => {
   
   
     const [tasks, setTasks] = useState([]);
@@ -17,7 +18,12 @@ const Sidebar = () => {
         name: inputValue,
         time: time,
         day: day,
+      
       };
+
+      onAddTask(newTask);
+
+    
 
       setTasks([...tasks, newTask]);
 
@@ -37,7 +43,7 @@ const Sidebar = () => {
     ));
   };
   
-  return (
+  return (    
       <div className='sidebar'>
       <form onSubmit={handleAddClick}>
         <label htmlFor="event-task" type="text" >Enter Task:</label>
@@ -75,8 +81,8 @@ const Sidebar = () => {
         {renderTasks()}
       </div>
     </div>
-    );
-  
+  );
+   
 };
 
 export default Sidebar;

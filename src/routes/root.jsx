@@ -1,7 +1,7 @@
 import Navbar from "./navBar"
 import { Outlet } from "react-router-dom";
 import Sidebar from '../Components/Sidebar';
-import Calendar from "../Components/Calender";
+import Calendar from "../Components/Calendar";
 
 export default function Root() {
   return (
