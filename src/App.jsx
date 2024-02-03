@@ -38,27 +38,23 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  
-    const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState([]);
 
-    const addTask = (task) => {
-        setTasks([...tasks, task]);
-    };
+  const addTask = (task) => {
+    setTasks([...tasks, task]);
+  };
 
-    return (
-        <div className="app">
-            <Sidebar onAddTask={addTask} />
-            <Calendar tasks={tasks} />
-        </div>
-    );
+  return (
+    <div className="app">
+      <Sidebar onAddTask={addTask} />
+      <Calendar tasks={[]} />
+    </div>
+  );
 }
-
 
 export default App;
 
-// Create a new component that includes both Calendar and Sidebar
 function CalendarPage() {
-  // Here you can manage shared state or logic for Calendar and Sidebar
   return (
     <div>
       <Sidebar />
@@ -68,7 +64,7 @@ function CalendarPage() {
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-    <React.StrictMode>
-      <RouterProvider router={router} />
-    </React.StrictMode>
-  );
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
+);
