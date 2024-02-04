@@ -18,7 +18,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
-// Firestore reference
+//firestore reference
 const firestore = admin.firestore();
 
 exports.createUserDoc = functions.auth.user().onCreate((user) => {
@@ -71,7 +71,7 @@ exports.createTask = functions.https.onCall(async (data, context) => {
         const callerUid = context.auth.uid;
         const callerTasksRef = firestore.collection('tasks').doc(callerUid).collection('created');
 
-        if (!data || !data.title || !data.description || !data.startDate || !data.endDate) 
+        if (!data || !data.name || !data.time || !data.date) 
         {
             throw new functions.https.HttpsError('invalid-argument', 'Missing required data fields.');
         }

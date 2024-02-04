@@ -2,6 +2,7 @@
 import "./Home.css";
 import { useState } from "react";
 import PropTypes from "prop-types";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 const Sidebar = ({ onAddTask }) => {
   const [tasks, setTasks] = useState([]);
@@ -17,6 +18,14 @@ const Sidebar = ({ onAddTask }) => {
       time: time,
       date: date,
     };
+
+    const functions = getFunctions();
+    const createTask = httpsCallable(functions, 'createTask');
+    createTask(newTask).then((result) => {
+      console.log(result);
+    }).catch(error => {
+      console.error("Error creating task:", error);
+    });
 
     onAddTask(newTask);
 
