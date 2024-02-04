@@ -5,24 +5,24 @@ import { doc, setDoc } from 'firebase/firestore';
 
 const sender = auth.currentUser;
 
-// Function to send a friend request
+//function to send a friend request
 export const sendFriendRequest = async (receiverUid) => {
     const senderDocRef = doc(db, 'requests', sender.uid);
     const receiverDocRef = doc(db, 'requests', receiverUid);
 
-    // create the friend request data
+    //create the friend request data
     const friendRequestData = {
         displayName: sender.displayName,
         status: 'pending',
     };
 
     try {
-        // update the sender's document
+        //update the sender's document
         await setDoc(senderDocRef, {
         [`ownRequests.${receiverUid}`]: friendRequestData,
         }, { merge: true });
 
-        // update the receiver's document
+        //update the receiver's document
         await setDoc(receiverDocRef, {
         [`friendRequests.${sender.uid}`]: friendRequestData,
         }, { merge: true });

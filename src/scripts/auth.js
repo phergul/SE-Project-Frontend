@@ -7,24 +7,32 @@ import {
     signOut,
     onAuthStateChanged
 } from "firebase/auth";
-import { doc,  setDoc } from "firebase/firestore";
+import { getFunctions, httpsCallable } from "firebase/functions";
+const functions = getFunctions();
 
 //creates a new user in auth
 export const signUP = (email, password, username) => {
     createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            // Signed up 
+        .then(async (userCredential) => {
+            //signed up 
             const user = userCredential.user;
             //add display name to authentication
             user.displayName = username;
+
+            const send = {
+                displayName: user.displayName
+            }
+
+            //sends to user doc
+            const sendUserInfo = httpsCallable(functions, 'sendUserInfo');
+            sendUserInfo(send);
+
             console.log(user);
-            //update displayName in users collection
-            const userRef = doc(db, 'users', user.uid);
-            setDoc(userRef, { displayName: username }, { merge: true });
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
+            console.log(`Error code: ${errorCode}. ${errorMessage}`);
         });
 }
 
@@ -38,6 +46,7 @@ export const signIN = (email, password) => {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
+            console.log(`Error code: ${errorCode}. ${errorMessage}`);
         });
 }
 
@@ -49,6 +58,7 @@ export const signOUT = () => {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
+            console.log(`Error code: ${errorCode}. ${errorMessage}`);
         });
 }
 

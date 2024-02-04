@@ -30,7 +30,7 @@ exports.createUserDoc = functions.auth.user().onCreate((user) => {
   
     const userRef = firestore.collection('users').doc(uid);
   
-    // Create a document in the 'users' collection with user information (creates a users collection if one doesn't already exist)
+    //create a document in the 'users' collection with user information (creates a users collection if one doesn't already exist)
     return userRef.set({
       email: email,
     })
@@ -52,7 +52,15 @@ exports.createUserDoc = functions.auth.user().onCreate((user) => {
 })
 
 
+//adds display name to database for user
+exports.sendUserInfo = functions.https.onCall((data, context) => {
+    const userRef = firestore.collection('users').doc(context.auth.uid);
 
+    return userRef.update(data, { merge: true });
+})
+
+
+//callable for creating a task by user with SDK
 exports.createTask = functions.https.onCall(async (data, context) => {
     try {
         if (!context.auth) 
@@ -82,6 +90,7 @@ exports.createTask = functions.https.onCall(async (data, context) => {
 })
 
 
+//returns array of tasks relating to uid
 exports.getUserTasks = functions.https.onCall(async (data, context) => {
     try {
         if (!context.auth) 
@@ -108,3 +117,25 @@ exports.getUserTasks = functions.https.onCall(async (data, context) => {
         throw new functions.https.HttpsError('internal', 'An error occurred while retrieving tasks.');
     }
 })
+
+
+//searches database for users with display name
+exports.searchUsersByDisplayName = functions.https.onCall(async (data, context) => {
+    try {
+        const displayName = data.displayName;
+
+        const usersCollection = admin.firestore().collection('users');
+        const querySnapshot = await usersCollection.where('displayName', '==', displayName).get();
+        const results = [];
+  
+        querySnapshot.forEach((doc) => {
+            //push each doc into the results array
+            results.push(doc.data());
+        });
+  
+        return results;
+    } catch (error) {
+        console.error('Error searching for users:', error);
+        return [];
+    }
+  });

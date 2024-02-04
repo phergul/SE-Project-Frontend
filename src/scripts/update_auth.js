@@ -22,6 +22,7 @@ export const deleteAccount = () => {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
+            console.log(`Error code: ${errorCode}. ${errorMessage}`);
         });
 }
 
@@ -35,6 +36,7 @@ export const updateUserEmail = (newEmail) => {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
+            console.log(`Error code: ${errorCode}. ${errorMessage}`);
         });
 }
 
@@ -47,6 +49,7 @@ export const resetPasswordEmail = (email) => {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
+            console.log(`Error code: ${errorCode}. ${errorMessage}`);
         });
 }
 
@@ -64,11 +67,12 @@ export const reauthenticateUser = () => {
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
+            console.log(`Error code: ${errorCode}. ${errorMessage}`);
         });
 }
 
 const promptForCredentials = () => {
     //TODO:
-    //somehow get user to re-enter their credentials
+    //get user to re-enter their credentials
     //called in reauthenicateUser() above
 }
