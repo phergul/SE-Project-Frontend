@@ -1,7 +1,7 @@
 import "../styles.css";
 import { useState } from "react";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
-const mockDatabase = ["conor13", "ben43", "ben13", "micheal47", "micehal43"];
 const defaultUsernames = [];
 
 export default function UsernameForm() {
@@ -13,12 +13,17 @@ export default function UsernameForm() {
   }
 
   function handleAddClick() {
-    if (inputValue !== "" && mockDatabase.includes(inputValue)) {
-      setUsername([...username, inputValue]);
-      setInputValue("");
-    } else {
-      alert("There is no such username under this name");
-    }
+    const functions = getFunctions();
+    const searchUsersByDisplayName = httpsCallable(functions, 'searchUsersByDisplayName');
+
+    searchUsersByDisplayName({ inputValue }).then((result) => {
+      console.log(result);
+    }).catch(error => {
+      console.error(error);
+    });
+
+    
+
   }
 
   function deleteUsername(index) {

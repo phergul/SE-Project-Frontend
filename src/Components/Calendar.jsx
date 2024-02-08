@@ -31,7 +31,7 @@ const Calendar = ({ tasks }) => {
   useEffect(() => {
     getUserTasks().then((result) => {
       const data = result.data;
-      setTasks(data);
+      console.log(data);
     }).catch(error => {
       console.error("Error fetching tasks:", error);
     });

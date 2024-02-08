@@ -1,11 +1,12 @@
 // this file will export every function relating to firebase's authentication
 
-import { auth, db } from "../firebase_config/firebase";
+import { auth } from "../firebase_config/firebase";
 import { 
     createUserWithEmailAndPassword, 
     signInWithEmailAndPassword, 
     signOut,
-    onAuthStateChanged
+    onAuthStateChanged,
+    updateProfile
 } from "firebase/auth";
 import { getFunctions, httpsCallable } from "firebase/functions";
 const functions = getFunctions();
@@ -14,20 +15,16 @@ const functions = getFunctions();
 export const signUP = (email, password, username) => {
     createUserWithEmailAndPassword(auth, email, password)
         .then(async (userCredential) => {
-            //signed up 
+            // Signed up
             const user = userCredential.user;
-            //add display name to authentication
-            user.displayName = username;
-
-            const send = {
-                displayName: user.displayName
-            }
-
-            //sends to user doc
-            const sendUserInfo = httpsCallable(functions, 'sendUserInfo');
-            sendUserInfo(send);
-
+            
+            await updateProfile(user, { displayName: username });
+            
             console.log(user);
+
+            // Send user info to Cloud Function
+            const sendUserInfo = httpsCallable(functions, 'sendUserInfo');
+            sendUserInfo({ displayName: user.displayName });
         })
         .catch((error) => {
             const errorCode = error.code;
