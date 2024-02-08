@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../LoginSignup.css';
 import '../routes/ForgotPassword';
+import { signIN, signUP } from '../scripts/auth';
 
 const LoginSignup = () => {
   
@@ -18,9 +19,25 @@ const LoginSignup = () => {
     setFormData({ ...formData, [name]: value });
   };
   
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-   
+    
+    if (isLoginView) 
+    {
+      try {
+        await signIN(formData.email, formData.password);
+      } catch (error) {
+        console.error("Sign in failed:", error);
+      }
+    } 
+    else 
+    {
+      try {
+        await signUP(formData.email, formData.password, formData.username);
+      } catch (error) {
+        console.error("Sign up failed:", error);
+      }
+    }
   };        
 
   const handleForgotPassword = () => {

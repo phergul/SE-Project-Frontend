@@ -9,8 +9,9 @@ import {
   addMonths,
   subMonths,
 } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -23,6 +24,19 @@ const Calendar = ({ tasks }) => {
     end: lastDayOfMonth,
   });
   const startingDayIndex = getDay(firstDayOfMonth);
+
+  const functions = getFunctions();
+  const getUserTasks = httpsCallable(functions, 'getUserTasks');
+
+  useEffect(() => {
+    getUserTasks().then((result) => {
+      const data = result.data;
+      console.log(data);
+    }).catch(error => {
+      console.error("Error fetching tasks:", error);
+    });
+  }, []);
+
 
   const handlePreviousMonth = () => {
     setCurrentMonth((prevMonth) => subMonths(prevMonth, 1));
