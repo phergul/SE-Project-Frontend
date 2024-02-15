@@ -16,7 +16,6 @@ export default function Root() {
       <Navbar />
       <Sidebar onAddTask={handleAddTask} />
       <Calendar tasks={tasks} />
-      <h1 className="HomePage">This is going to be the root</h1>
       <Outlet />
     </div>
   );

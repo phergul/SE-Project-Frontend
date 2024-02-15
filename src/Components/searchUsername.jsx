@@ -14,16 +14,18 @@ export default function UsernameForm() {
 
   function handleAddClick() {
     const functions = getFunctions();
-    const searchUsersByDisplayName = httpsCallable(functions, 'searchUsersByDisplayName');
+    const searchUsersByDisplayName = httpsCallable(
+      functions,
+      "searchUsersByDisplayName"
+    );
 
-    searchUsersByDisplayName({ inputValue }).then((result) => {
-      console.log(result);
-    }).catch(error => {
-      console.error(error);
-    });
-
-    
-
+    searchUsersByDisplayName({ inputValue })
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   function deleteUsername(index) {

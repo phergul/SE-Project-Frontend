@@ -2,7 +2,10 @@
 import "./Home.css";
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { getFunctions, httpsCallable } from "firebase/functions";
+import db from "../config/firestore";
+import { collection, addDoc } from "firebase/firestore";
+import { useDisclosure } from "@mantine/hooks";
+import { Modal, Button } from "@mantine/core";
 
 const Sidebar = ({ onAddTask }) => {
   const [tasks, setTasks] = useState([]);
@@ -10,7 +13,9 @@ const Sidebar = ({ onAddTask }) => {
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
 
-  const handleAddClick = (event) => {
+  const [opened, { open, close }] = useDisclosure(false);
+
+  const handleAddClick = async (event) => {
     event.preventDefault();
 
     const newTask = {
@@ -19,17 +24,22 @@ const Sidebar = ({ onAddTask }) => {
       date: date,
     };
 
-    const functions = getFunctions();
-    const createTask = httpsCallable(functions, 'createTask');
-    createTask(newTask).then((result) => {
-      console.log(result);
-    }).catch(error => {
-      console.error("Error creating task:", error);
-    });
-
     onAddTask(newTask);
 
-    setTasks([...tasks, newTask]);
+    try {
+      const docRef = await addDoc(collection(db, "tasks"), {
+        task: inputValue,
+        time,
+        date,
+      });
+      setTasks([...tasks, { ...newTask, id: docRef.id }]);
+
+      if (onAddTask) {
+        onAddTask(newTask);
+      }
+    } catch (error) {
+      console.log(error);
+    }
 
     setInputValue("");
     setTime("");
@@ -37,54 +47,60 @@ const Sidebar = ({ onAddTask }) => {
   };
 
   return (
-    <div className="sidebar">
-      <form onSubmit={handleAddClick}>
-        <label htmlFor="event-task" type="text">
-          Enter Task:
-        </label>
-        <input
-          type="text"
-          id="event-name"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          required
-        />
+    <>
+      <Button onClick={open}>Add task</Button>
 
-        <label htmlFor="time">Time:</label>
-        <input
-          type="time"
-          id="time"
-          value={time}
-          onChange={(e) => setTime(e.target.value)}
-          required
-        />
+      <Modal
+        opened={opened}
+        onClose={close}
+        size="70%"
+        title="addingTask"
+        centered
+      >
+        {
+          <div className="sidebar">
+            <form onSubmit={handleAddClick}>
+              <label htmlFor="event-task" type="text">
+                Enter Task:
+              </label>
+              <input
+                type="text"
+                id="event-name"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                required
+              />
 
-        <label htmlFor="day">Day:</label>
-        <input
-          type="date"
-          id="day"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-        />
+              <label htmlFor="time">Time:</label>
+              <input
+                type="time"
+                id="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                required
+              />
 
-        <button type="submit">Create Task</button>
-      </form>
-      <div className="tasks-list">
-        {tasks.map((task, index) => (
-          <div key={index} className="task-item">
-            <p>Task: {task.name}</p>
-            <p>Time: {task.time}</p>
-            <p>Day: {task.day}</p>
+              <label htmlFor="day">Day:</label>
+              <input
+                type="date"
+                id="day"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                required
+              />
+
+              <button type="submit">Create Task</button>
+            </form>
           </div>
-        ))}
-      </div>
-    </div>
+        }
+      </Modal>
+    </>
   );
 };
 
 Sidebar.propTypes = {
   onAddTask: PropTypes.func.isRequired,
+  onUpdateTasks: PropTypes.func,
 };
 
 export default Sidebar;

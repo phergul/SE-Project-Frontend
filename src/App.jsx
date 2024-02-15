@@ -10,6 +10,10 @@ import ErrorPage from "./error";
 import ForgotPassword from "./routes/ForgotPassword";
 import Calendar from "./Components/Calendar";
 import Sidebar from "./Components/Sidebar";
+import "@mantine/core/styles.css";
+import { MantineProvider } from "@mantine/core";
+
+// Assuming your main application component is named App
 
 // Define your router outside of the App component if it doesn't need to use props
 const router = createBrowserRouter([
@@ -65,6 +69,8 @@ function CalendarPage() {
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <MantineProvider>
+      <RouterProvider router={router} />
+    </MantineProvider>
   </React.StrictMode>
 );
