@@ -12,8 +12,8 @@ import {
   subMonths,
   parse,
 } from "date-fns";
-import db from "../config/firestore";
-import { collection, getDocs } from "firebase/firestore";
+import { auth } from "../config/firebase";
+import { fetchTasksFromFirestore } from "../scripts/task";
 import "./Home.css";
 import { Modal, Button, SimpleGrid } from "@mantine/core";
 
@@ -37,20 +37,21 @@ const Calendar = () => {
   };
 
   useEffect(() => {
-    const getTasks = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "tasks"));
-        const fetchedTasks = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setTasks(fetchedTasks);
-      } catch (error) {
-        console.error("Error fetching tasks:", error);
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        //the user is signed in so fetch thier tasks
+        try {
+          const fetchedTasks = await fetchTasksFromFirestore();
+          setTasks(fetchedTasks);
+        } catch (error) {
+          console.error("Error fetching tasks:", error);
+        }
+      } else {
+        console.log("No user is signed in");
       }
-    };
-
-    getTasks();
+    });
+  
+    return () => unsubscribe();
   }, []);
 
   const firstDayOfMonth = startOfMonth(currentMonth);

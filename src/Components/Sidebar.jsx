@@ -2,10 +2,10 @@
 import "./Home.css";
 import { useState } from "react";
 import PropTypes from "prop-types";
-import db from "../config/firestore";
-import { collection, addDoc } from "firebase/firestore";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal, Button } from "@mantine/core";
+import { authState } from "../scripts/auth";
+import { addTaskToFirestore } from "../scripts/task";
 
 const Sidebar = ({ onAddTask }) => {
   const [tasks, setTasks] = useState([]);
@@ -27,7 +27,7 @@ const Sidebar = ({ onAddTask }) => {
     onAddTask(newTask);
 
     try {
-      const docRef = await addDoc(collection(db, "tasks"), {
+      const docRef = await addTaskToFirestore({
         task: inputValue,
         time,
         date,
@@ -48,6 +48,7 @@ const Sidebar = ({ onAddTask }) => {
 
   return (
     <>
+    <button onClick={authState}>auth</button>
       <Button onClick={open}>Add task</Button>
 
       <Modal
