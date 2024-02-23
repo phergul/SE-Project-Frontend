@@ -3,7 +3,7 @@ import "./Home.css";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Button } from "@mantine/core";
+import { Modal, Button, Menu } from "@mantine/core";
 import { authState } from "../scripts/auth";
 import { addTaskToFirestore } from "../scripts/task";
 
@@ -12,8 +12,13 @@ const Sidebar = ({ onAddTask }) => {
   const [inputValue, setInputValue] = useState("");
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
+  const [priority, setPriority] = useState(0);
 
   const [opened, { open, close }] = useDisclosure(false);
+
+  const handleClickLow = () => setPriority(1);
+  const handleClickMedium = () => setPriority(2);
+  const handleClickHigh = () => setPriority(3);
 
   const handleAddClick = async (event) => {
     event.preventDefault();
@@ -22,6 +27,7 @@ const Sidebar = ({ onAddTask }) => {
       name: inputValue,
       time: time,
       date: date,
+      priority: priority,
     };
 
     onAddTask(newTask);
@@ -31,6 +37,7 @@ const Sidebar = ({ onAddTask }) => {
         task: inputValue,
         time,
         date,
+        priority,
       });
       setTasks([...tasks, { ...newTask, id: docRef.id }]);
 
@@ -48,7 +55,7 @@ const Sidebar = ({ onAddTask }) => {
 
   return (
     <>
-    <button onClick={authState}>auth</button>
+      <button onClick={authState}>auth</button>
       <Button onClick={open}>Add task</Button>
 
       <Modal
@@ -89,6 +96,33 @@ const Sidebar = ({ onAddTask }) => {
                 onChange={(e) => setDate(e.target.value)}
                 required
               />
+
+              <Menu>
+                <Menu.Target>
+                  <Button>Priority</Button>
+                </Menu.Target>
+
+                <Menu.Dropdown>
+                  <Menu.Item>
+                    <Button variant="filled" onClick={handleClickLow}>
+                      Low
+                    </Button>
+                    ;
+                  </Menu.Item>
+                  <Menu.Item>
+                    <Button variant="filled" onClick={handleClickMedium}>
+                      Meduim
+                    </Button>
+                    ;
+                  </Menu.Item>
+                  <Menu.Item>
+                    <Button variant="filled" onClick={handleClickHigh}>
+                      High
+                    </Button>
+                    ;
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
 
               <button type="submit">Create Task</button>
             </form>

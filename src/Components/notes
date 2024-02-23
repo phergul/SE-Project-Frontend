@@ -17,3 +17,326 @@ useEffect(() => {
 
     getTasks();
   }, [onUpdateTasks]);
+
+
+
+  className="grid grid-cols-7 gap-2">
+
+
+
+
+
+   //
+
+   import { useState, useEffect } from "react";
+import {
+  format,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  getDay,
+  isSameDay,
+  addMonths,
+  subMonths,
+  parse,
+} from "date-fns";
+import db from "../config/firestore";
+import { collection, getDocs } from "firebase/firestore";
+import "./Home.css";
+import { Modal, Button, SimpleGrid } from "@mantine/core";
+
+const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+const Calendar = () => {
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [tasks, setTasks] = useState([]);
+
+  const [selectedDay, setSelectedDay] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleDayClick = (day) => {
+    setSelectedDay(day);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedDay(null);
+    setIsModalOpen(false);
+  };
+
+  useEffect(() => {
+    const getTasks = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "tasks"));
+        const fetchedTasks = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setTasks(fetchedTasks);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    getTasks();
+  }, []);
+
+  const firstDayOfMonth = startOfMonth(currentMonth);
+  const lastDayOfMonth = endOfMonth(currentMonth);
+  const daysInMonth = eachDayOfInterval({
+    start: firstDayOfMonth,
+    end: lastDayOfMonth,
+  });
+  const startingDayIndex = getDay(firstDayOfMonth);
+
+  const handlePreviousMonth = () => {
+    setCurrentMonth((prevMonth) => subMonths(prevMonth, 1));
+  };
+
+  const handleNextMonth = () => {
+    setCurrentMonth((prevMonth) => addMonths(prevMonth, 1));
+  };
+
+  return (
+    <>
+      <div className="container">
+        <div>
+          <h2 className="calendar-title">
+            {format(currentMonth, "MMMM yyyy")}
+          </h2>
+          <button className="previous" onClick={handlePreviousMonth}>
+            Previous
+          </button>
+          <button className="next" onClick={handleNextMonth}>
+            Next
+          </button>
+        </div>
+
+        <SimpleGrid cols={7} spacing="xs" verticalSpacing="xs">
+          {WEEKDAYS.map((day) => (
+            <div className="Days" key={day}>
+              {day}
+            </div>
+          ))}
+
+          {Array.from({ length: startingDayIndex }).map((_, index) => (
+            <div key={`empty-${index}`} className="border-of-days" />
+          ))}
+          {daysInMonth.map((day, index) => {
+            const isToday = isSameDay(day, new Date());
+            const dayClassName = isToday
+              ? "border-of-days today"
+              : "border-of-days";
+            const tasksForDay = tasks.filter((task) => {
+              const dateFormat = "yyyy-MM-dd";
+              const taskDate = parse(task.date, dateFormat, new Date());
+              return isSameDay(taskDate, day);
+            });
+
+            return (
+              <div key={index} className={dayClassName}>
+                <Button onClick={() => handleDayClick()}>
+                  {format(day, "d")}
+                </Button>{" "}
+                {format(day, "d")}
+                {tasksForDay.map((task, taskIndex) => (
+                  <div key={taskIndex} className="task">
+                    {task.task} {/* where the task name is displayed*/}
+                  </div>
+                ))}
+              </div>
+            );
+          })}
+        </SimpleGrid>
+      </div>
+      <Modal
+        opened={isModalOpen}
+        onClose={handleCloseModal}
+        title={
+          selectedDay ? `Tasks for ${format(selectedDay, "MMMM d, yyyy")}` : ""
+        }
+      >
+        {selectedDay && (
+          <>
+            {/* Render tasks for the selected day inside the modal */}
+            {tasks
+              .filter((task) =>
+                isSameDay(
+                  parse(task.date, "yyyy-MM-dd", new Date()),
+                  selectedDay
+                )
+              )
+              .map((task, index) => (
+                <div key={index} className="task">
+                  {task.task}
+                </div>
+              ))}
+          </>
+        )}
+      </Modal>
+    </>
+  );
+};
+
+export default Calendar;
+
+
+
+
+
+
+
+import { useState, useEffect } from "react";
+import {
+  format,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  getDay,
+  isSameDay,
+  addMonths,
+  subMonths,
+  parse,
+} from "date-fns";
+import db from "../config/firestore";
+import { collection, getDocs } from "firebase/firestore";
+import { Modal, Button, SimpleGrid, Box, Text } from "@mantine/core";
+import "./Home.css";
+
+const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+const Calendar = () => {
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [tasks, setTasks] = useState([]);
+  const [selectedDay, setSelectedDay] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const getTasks = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "tasks"));
+        const fetchedTasks = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setTasks(fetchedTasks);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    getTasks();
+  }, []);
+
+  const firstDayOfMonth = startOfMonth(currentMonth);
+  const lastDayOfMonth = endOfMonth(currentMonth);
+  const daysInMonth = eachDayOfInterval({
+    start: firstDayOfMonth,
+    end: lastDayOfMonth,
+  });
+  const startingDayIndex = getDay(firstDayOfMonth);
+
+  const handleDayClick = (day) => {
+    setSelectedDay(day);
+    setIsModalOpen(true);
+  };
+
+  const handlePreviousMonth = () => {
+    setCurrentMonth((prevMonth) => subMonths(prevMonth, 1));
+  };
+
+  const handleNextMonth = () => {
+    setCurrentMonth((prevMonth) => addMonths(prevMonth, 1));
+  };
+
+  const handleCloseModal = () => {
+    setSelectedDay(null);
+    setIsModalOpen(false);
+  };
+
+  return (
+    <>
+      <div className="container">
+        <div>
+          <h2 className="calendar-title">
+            {format(currentMonth, "MMMM yyyy")}
+          </h2>
+          <button className="previous" onClick={handlePreviousMonth}>
+            Previous
+          </button>
+          <button className="next" onClick={handleNextMonth}>
+            Next
+          </button>
+        </div>
+
+        <SimpleGrid cols={7} spacing="xs" verticalSpacing="xs">
+          {WEEKDAYS.map((day) => (
+            <div className="Days" key={day}>
+              {day}
+            </div>
+          ))}
+
+          {Array.from({ length: startingDayIndex }).map((_, index) => (
+            <div key={`empty-${index}`} style={{ height: "100px" }} /> // Placeholder for empty days
+          ))}
+
+          {daysInMonth.map((day) => {
+            const isToday = isSameDay(day, new Date());
+            const tasksForDay = tasks.filter((task) =>
+              isSameDay(parse(task.date, "yyyy-MM-dd", new Date()), day)
+            );
+
+            return (
+              <Button
+                key={day.toDateString()}
+                onClick={() => handleDayClick(day)}
+                p={0}
+                variant="light"
+                fullWidth
+                styles={{
+                  inner: {
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    height: "100px",
+                  },
+                }}
+              >
+                <Box style={{ width: "100%" }}>
+                  <Text weight={isToday ? "bold" : "normal"} size="sm">
+                    {format(day, "d")}
+                  </Text>
+                  {tasksForDay.map((task) => (
+                    <Text key={task.id} size="xs">
+                      • {task.task}
+                    </Text>
+                  ))}
+                </Box>
+              </Button>
+            );
+          })}
+        </SimpleGrid>
+      </div>
+      <Modal
+        opened={isModalOpen}
+        onClose={handleCloseModal}
+        title={
+          selectedDay ? `Tasks for ${format(selectedDay, "MMMM d, yyyy")}` : ""
+        }
+      >
+        {selectedDay &&
+          tasks
+            .filter((task) =>
+              isSameDay(parse(task.date, "yyyy-MM-dd", new Date()), selectedDay)
+            )
+            .map((task) => (
+              <div key={task.id} className="task">
+                {task.task}
+              </div>
+            ))}
+      </Modal>
+    </>
+  );
+};
+
+export default Calendar;
