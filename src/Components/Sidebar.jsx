@@ -3,9 +3,15 @@ import "./Home.css";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { useDisclosure } from "@mantine/hooks";
-import { Modal, Button, Menu } from "@mantine/core";
+import {
+  Modal,
+  Button,
+  Menu, Group, Box, Text, AppShell
+} from "@mantine/core";
 import { authState } from "../scripts/auth";
 import { addTaskToFirestore } from "../scripts/task";
+import { MdAddCircle } from "react-icons/md";
+
 
 const Sidebar = ({ onAddTask }) => {
   const [tasks, setTasks] = useState([]);
@@ -55,8 +61,18 @@ const Sidebar = ({ onAddTask }) => {
 
   return (
     <>
-      <button onClick={authState}>auth</button>
-      <Button onClick={open}>Add task</Button>
+
+      <Button onClick={authState}>auth</Button>
+
+      <AppShell>
+      <Group style={{ position: 'absolute', left: 1400, top: 80 }} align="center">
+        <Box position={{ bottom: '100' , right: '20' }}>
+        <Button variant='light' onClick={open} rightSection={<MdAddCircle size={20}/>}>
+          <Text fw={700} size={"md"}>Add Task</Text>
+        </Button>
+        </Box>
+      </Group>
+    </AppShell>
 
       <Modal
         opened={opened}

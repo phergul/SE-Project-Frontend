@@ -15,7 +15,9 @@ import {
 import { auth } from "../config/firebase";
 import { fetchTasksFromFirestore } from "../scripts/task";
 import "./Home.css";
-import { Modal, Button, SimpleGrid } from "@mantine/core";
+import {Modal, Button, SimpleGrid, Text, Group} from "@mantine/core";
+import { FaArrowRight, FaArrowLeft  } from "react-icons/fa6";
+import {useDisclosure} from "@mantine/hooks";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -25,6 +27,9 @@ const Calendar = () => {
 
   const [selectedDay, setSelectedDay] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [opened, { open, close }] = useDisclosure(false);     //opening add task box
+
 
   const handleDayClick = (day) => {
     setSelectedDay(day);
@@ -72,17 +77,21 @@ const Calendar = () => {
 
   return (
     <>
+
       <div className="container">
         <div>
           <h2 className="calendar-title">
             {format(currentMonth, "MMMM yyyy")}
           </h2>
-          <button className="previous" onClick={handlePreviousMonth}>
-            Previous
-          </button>
-          <button className="next" onClick={handleNextMonth}>
-            Next
-          </button>
+          <Button className="previous" onClick={handlePreviousMonth} variant="default">
+            <FaArrowLeft size={16} />
+            <Text fw={700} size={'md'}>Previous</Text>
+          </Button>
+
+          <Button className="next" onClick={handleNextMonth} variant="default">
+            <Text fw={700} size={'md'}>Next</Text>
+            <FaArrowRight size={16} />
+          </Button>
         </div>
 
         <SimpleGrid cols={7} spacing="xs" verticalSpacing="xs">
