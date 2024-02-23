@@ -5,7 +5,8 @@ import {
     addDoc,
     collection,
     getDocs,
-    Timestamp
+    Timestamp,
+    deleteDoc
 } from "@firebase/firestore";
 
 //adds task to firestore
@@ -29,6 +30,7 @@ export const addTaskToFirestore = async (taskData) => {
     }
 };
 
+
 //fetches users created tasks
 export const fetchTasksFromFirestore = async () => {
     try {
@@ -47,3 +49,18 @@ export const fetchTasksFromFirestore = async () => {
         throw error;
     }
 };
+
+
+export const deleteTaskFromFirestore = async (taskId) => {
+    try {
+        const user = auth.currentUser;
+
+        const taskToDelete = collection(db, `tasks/${user.uid}/created/${taskId}`);
+        const result = await deleteDoc(taskToDelete);
+
+        return result;
+    } catch (error) {
+        console.error("Error deleting task: ", error);
+        throw error;
+    }
+}
