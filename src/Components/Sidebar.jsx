@@ -34,17 +34,15 @@ const Sidebar = ({ onAddTask }) => {
       time: time,
       date: date,
       priority: priority,
+      ...(frequency && { recurrence: { frequency: frequency } }),
+      //frequency must be set to 'daily', 'weekly' or 'monthly'
+      //frequency needs to be null if the task is not recurring
     };
 
     onAddTask(newTask);
 
     try {
-      const docRef = await addTaskToFirestore({
-        task: inputValue,
-        time,
-        date,
-        priority,
-      });
+      const docRef = await addTaskToFirestore(newTask);
       setTasks([...tasks, { ...newTask, id: docRef.id }]);
 
       if (onAddTask) {
