@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Calendar from "../Components/Calendar";
-import Sidebar from "../Components/Sidebar";
 import Navbar from "./navBar";
 
 export default function Root() {
@@ -13,8 +12,7 @@ export default function Root() {
 
   return (
     <div>
-      <Navbar />
-      <Sidebar onAddTask={handleAddTask} />
+      <Navbar onAddTask={handleAddTask} />
       <Calendar tasks={tasks} />
       <Outlet />
     </div>
