@@ -10,12 +10,16 @@ import {
   Modal,
   Menu,
 } from "@mantine/core";
+import { query, where, getDocs, collection } from "firebase/firestore";
+import { db } from "../config/firebase";
 import { useDisclosure } from "@mantine/hooks";
 import { Link } from "react-router-dom";
 import { GiBrain } from "react-icons/gi";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { addTaskToFirestore } from "../scripts/task";
+
+import { auth } from "../config/firebase";
 
 const Navbar = ({ onAddTask }) => {
   const [burger, toggle] = useDisclosure();
@@ -27,6 +31,31 @@ const Navbar = ({ onAddTask }) => {
   const [priority, setPriority] = useState(0);
 
   const [opened, { open, close }] = useDisclosure(false);
+
+  const [searchOpened, setSearchOpened] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+  const handleSearch = async (event) => {
+    event.preventDefault();
+
+    const userId = auth.currentUser.uid;
+
+    const tasksRef = collection(db, `users/${userId}/created`);
+    const q = query(tasksRef, where("name", "==", searchTerm));
+
+    try {
+      const querySnapshot = await getDocs(q);
+      const results = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setSearchResults(results);
+    } catch (error) {
+      console.error("An error");
+    }
+  };
 
   const handleClickLow = () => setPriority(1);
   const handleClickMedium = () => setPriority(2);
@@ -86,6 +115,14 @@ const Navbar = ({ onAddTask }) => {
               </Text>
             </Group>
             <Group gap={5} visibleFrom="sm">
+              <Button
+                onClick={() => setSearchOpened(true)}
+                variant="subtle"
+                color="black"
+                size={"md"}
+              >
+                Search Task
+              </Button>
               <Button onClick={open} variant="subtle" color="black" size={"md"}>
                 Add Task
               </Button>
@@ -171,6 +208,36 @@ const Navbar = ({ onAddTask }) => {
                   </form>
                 </div>
               }
+            </Modal>
+
+            <Modal
+              opened={searchOpened}
+              onClose={() => setSearchOpened(false)}
+              size="70%"
+              title="Search Task"
+              centered
+            >
+              <form onSubmit={handleSearch}>
+                <Text>Enter task name:</Text>
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  required
+                />
+                <Button type="submit" onClick={handleSearch}>
+                  Search
+                </Button>
+              </form>
+              <div>
+                {searchResults.length > 0 ? (
+                  searchResults.map((task, index) => (
+                    <div key={index}>{task.name}</div>
+                  ))
+                ) : (
+                  <Text>No results found.</Text>
+                )}
+              </div>
             </Modal>
 
             <Burger opened={burger} onClick={burgerClicked} hiddenFrom="sm">
