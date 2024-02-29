@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import { GiBrain } from "react-icons/gi";
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { addTaskToFirestore } from "../scripts/task";
+import { addTaskToFirestore, searchForTask } from "../scripts/task";
 
 const Navbar = ({ onAddTask }) => {
   const [burger, toggle] = useDisclosure();
@@ -27,6 +27,22 @@ const Navbar = ({ onAddTask }) => {
   const [priority, setPriority] = useState(0);
 
   const [opened, { open, close }] = useDisclosure(false);
+
+  const [searchOpened, setSearchOpened] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+  const handleSearch = async (event) => {
+    event.preventDefault();
+
+    try {
+      const searchTaskResults = await searchForTask(searchTerm);
+      
+      setSearchResults(searchTaskResults);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleClickLow = () => setPriority(1);
   const handleClickMedium = () => setPriority(2);
@@ -86,6 +102,14 @@ const Navbar = ({ onAddTask }) => {
               </Text>
             </Group>
             <Group gap={5} visibleFrom="sm">
+              <Button
+                onClick={() => setSearchOpened(true)}
+                variant="subtle"
+                color="black"
+                size={"md"}
+              >
+                Search Task
+              </Button>
               <Button onClick={open} variant="subtle" color="black" size={"md"}>
                 Add Task
               </Button>
@@ -171,6 +195,36 @@ const Navbar = ({ onAddTask }) => {
                   </form>
                 </div>
               }
+            </Modal>
+
+            <Modal
+              opened={searchOpened}
+              onClose={() => setSearchOpened(false)}
+              size="70%"
+              title="Search Task"
+              centered
+            >
+              <form onSubmit={handleSearch}>
+                <Text>Enter task name:</Text>
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  required
+                />
+                <Button type="submit" onClick={handleSearch}>
+                  Search
+                </Button>
+              </form>
+              <div>
+                {searchResults.length > 0 ? (
+                  searchResults.map((task, index) => (
+                    <div key={index}>{task.task}</div>
+                  ))
+                ) : (
+                  <Text>No results found.</Text>
+                )}
+              </div>
             </Modal>
 
             <Burger opened={burger} onClick={burgerClicked} hiddenFrom="sm">
