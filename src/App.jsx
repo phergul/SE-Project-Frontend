@@ -9,9 +9,9 @@ import AddFriendPage from "./routes/addfriend";
 import ErrorPage from "./error";
 import ForgotPassword from "./routes/ForgotPassword";
 import Calendar from "./Components/Calendar";
-import Sidebar from "./Components/Sidebar";
 import "@mantine/core/styles.css";
 import { MantineProvider } from "@mantine/core";
+import Navbar from "./routes/navBar";
 
 // Assuming your main application component is named App
 
@@ -50,7 +50,7 @@ function App() {
 
   return (
     <div className="app">
-      <Sidebar onAddTask={addTask} />
+      <Navbar onAddTask={addTask} />
       <Calendar tasks={[]} />
     </div>
   );
@@ -61,7 +61,7 @@ export default App;
 function CalendarPage() {
   return (
     <div>
-      <Sidebar />
+      <Navbar />
       <Calendar />
     </div>
   );

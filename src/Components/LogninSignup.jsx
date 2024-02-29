@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../LoginSignup.css';
-import '../routes/ForgotPassword';
-import { signUP, signIN, signOUT } from '../scripts/auth';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../LoginSignup.css";
+import "../routes/ForgotPassword";
+import { signUP, signIN, signOUT } from "../scripts/auth";
 
 const LoginSignup = () => {
   const navigate = useNavigate();
@@ -51,7 +51,9 @@ const LoginSignup = () => {
   return (
     <div className="login-signup-box">
       <button onClick={signOUT}>signOut</button>
-      <h1 className="login-signup-header">{isLoginView ? 'Login' : 'Sign Up'}</h1>
+      <h1 className="login-signup-header">
+        {isLoginView ? "Login" : "Sign Up"}
+      </h1>
       <form onSubmit={handleSubmit}>
         {/* Include username only if it's sign-up view */}
         {!isLoginView && (
