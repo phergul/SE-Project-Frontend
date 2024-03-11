@@ -1,5 +1,32 @@
-/* LoginSignup.css */
+/* New LoginSignup.css */
+.title {
+  font-size: 26rem;
+  font-weight: 900;
+  font-family:
+          Greycliff CF,
+          var(--mantine-font-family);
+}
 
+.controls {
+  @media (max-width: 768px) {
+    flex-direction: column-reverse;
+  }
+}
+
+.control {
+  @media (max-width: 768px) {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+.title {
+  font-family:
+          Greycliff CF,
+          var(--mantine-font-family);
+  font-weight: 900;
+}
+/**
 .login-signup-box {
   max-width: 400px;
   margin: 2rem auto;
@@ -19,7 +46,24 @@
 .inputs {
   margin-bottom: 1rem;
 }
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc
+  border-radius: 4px;
+  box-sizing: border-box;
+}
 
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+  border-color: #007bff;
+  outline: none;
+}
 input[type="text"],
 input[type="email"],
 input[type="password"] {
@@ -75,7 +119,13 @@ label {
   background-color: #0056b3;
 }
 
-/* Add any media queries below to make the form responsive */
+
+/* New Login/Sign-up page */
+
+
+
+
+/* Add any media queries below to make the form responsive *//*
 @media (max-width: 768px) {
   .login-signup-box {
     margin: 1rem;
@@ -90,18 +140,18 @@ label {
 
 .toggle-view {
   background-color: #f8f9fa; /* Light gray background */
-  color: #6c757d; /* Dark gray text */
-  border: 1px solid #ddd; /* Slight border to emphasize the button */
-  margin-top: 10px; /* Spacing from the submit button */
-}
+/*  color: #6c757d; /* Dark gray text */
+/*  border: 1px solid #ddd; /* Slight border to emphasize the button */
+/*  margin-top: 10px; /* Spacing from the submit button */
+/*}
 
 .toggle-view:hover {
   background-color: #e2e6ea; /* Darken background on hover */
-  border-color: #dae0e5; /* Darken border on hover */
-}
+ /* border-color: #dae0e5; /* Darken border on hover */
+/*}
 
 /* ForgotPassword.css */
-
+/*
 .forgot-password-page {
   max-width: 400px;
   margin: 20px auto;
@@ -139,7 +189,9 @@ label {
   background-color: #0056b3;
 }
 
+ */
 
 
-  
+
+
   

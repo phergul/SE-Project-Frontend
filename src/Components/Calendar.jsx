@@ -18,7 +18,9 @@ import {
   deleteTaskFromFirestore,
 } from "../scripts/task";
 import "./Home.css";
-import { Modal, Button, SimpleGrid } from "@mantine/core";
+import { Modal, Button, SimpleGrid, Text } from "@mantine/core";
+import { IoMdArrowRoundBack, IoMdArrowRoundForward  } from "react-icons/io";
+
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -90,12 +92,12 @@ const Calendar = () => {
           <h2 className="calendar-title">
             {format(currentMonth, "MMMM yyyy")}
           </h2>
-          <button className="previous" onClick={handlePreviousMonth}>
-            Previous
-          </button>
-          <button className="next" onClick={handleNextMonth}>
-            Next
-          </button>
+          <Button variant={"outline"} size={'sm'} color={"Black"} className="previous" onClick={handlePreviousMonth} leftSection={ <IoMdArrowRoundBack size={18}/> }>
+            <Text fw={'700'}>Previous</Text>
+          </Button>
+          <Button variant={"outline"} size={'sm'} color={"Black"} className="next" onClick={handleNextMonth} rightSection={ <IoMdArrowRoundForward size={18} /> }>
+            <Text fw={'700'}>Next</Text>
+          </Button>
         </div>
 
         <SimpleGrid cols={7} spacing="xs" verticalSpacing="xs">

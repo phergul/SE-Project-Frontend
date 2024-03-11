@@ -8,11 +8,12 @@ import {
   Group,
   Text,
   Modal,
-  Menu,
+  Menu, Paper, TextInput,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Link } from "react-router-dom";
 import { GiBrain } from "react-icons/gi";
+import { IoMdArrowDropright } from "react-icons/io";
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { addTaskToFirestore, searchForTask } from "../scripts/task";
@@ -128,72 +129,79 @@ const Navbar = ({ onAddTask }) => {
             <Modal
               opened={opened}
               onClose={close}
-              size="70%"
-              title="addingTask"
+              size="xl"
+              title={<Text fw={'700'}>Add Your Task Details</Text>}
               centered
             >
               {
-                <div className="sidebar">
+                <Paper className="sidebar">
                   <form onSubmit={handleAddClick}>
-                    <label htmlFor="event-task" type="text">
-                      Enter Task:
-                    </label>
-                    <input
-                      type="text"
-                      id="event-name"
-                      value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
-                      required
+                    <TextInput
+                        label="Enter Task Name"
+                        type="text"
+                        id="event-name"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        required
                     />
 
-                    <label htmlFor="time">Time:</label>
-                    <input
-                      type="time"
-                      id="time"
-                      value={time}
-                      onChange={(e) => setTime(e.target.value)}
-                      required
+
+                    <TextInput
+                        label="Time"
+                        type="time"
+                        id="time"
+                        value={time}
+                        onChange={(e) => setTime(e.target.value)}
+                        required
                     />
 
-                    <label htmlFor="day">Day:</label>
-                    <input
-                      type="date"
-                      id="day"
-                      value={date}
-                      onChange={(e) => setDate(e.target.value)}
-                      required
+                    <TextInput
+                        label="Day"
+                        type="date"
+                        id="day"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                        required
                     />
 
-                    <Menu>
+
+                    <Menu position="right-start" withArrow arrowPosition={"center"}>
                       <Menu.Target>
-                        <Button>Priority</Button>
+                        <Button mt={'15'} variant="outline" size='xs' color="Grey" rightSection={<IoMdArrowDropright/>}>
+                          <Text size='sm' fw={'700'}>
+                            Priority
+                          </Text>
+                        </Button>
                       </Menu.Target>
 
                       <Menu.Dropdown>
                         <Menu.Item>
-                          <Button variant="filled" onClick={handleClickLow}>
-                            Low
+                          <Button variant="transparent" onClick={handleClickLow}>
+                            <Text fw={'700'} color="LightGreen">Low</Text>
                           </Button>
-                          ;
+
                         </Menu.Item>
                         <Menu.Item>
-                          <Button variant="filled" onClick={handleClickMedium}>
-                            Meduim
+                          <Button variant="transparent" onClick={handleClickMedium}>
+                            <Text fw={'700'} color="Orange">Medium</Text>
                           </Button>
-                          ;
+
                         </Menu.Item>
                         <Menu.Item>
-                          <Button variant="filled" onClick={handleClickHigh}>
-                            High
+                          <Button variant="transparent" onClick={handleClickHigh}>
+                            <Text fw={'700'} color="Red">High</Text>
                           </Button>
-                          ;
+
                         </Menu.Item>
                       </Menu.Dropdown>
                     </Menu>
 
-                    <button type="submit">Create Task</button>
+                    <Button type="submit" mt={'40'} fullWidth>
+                      Create Task
+                    </Button>
+
                   </form>
-                </div>
+                </Paper>
               }
             </Modal>
 
