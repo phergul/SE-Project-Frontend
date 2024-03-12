@@ -4,24 +4,26 @@ const admin = require('../adminInit');
 
 //searches database for users with display name
 exports.searchUsersByDisplayName = functions.https.onCall(async (data, context) => {
-    if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'You must be authenticated to call this function.');
-    }
-
-    if (!data.inputValue) {
-        throw new functions.https.HttpsError('invalid-argument', 'The inputValue parameter is required.');
-    }
-
-    const displayName = data.inputValue;
+    const inputWords = data.inputValue.toLowerCase().split(/\s+/);
+    let matchedUsers = [];
 
     try {
         const listUsersResult = await admin.auth().listUsers();
+        const users = listUsersResult.users;
 
-        const usersWithDisplayName = listUsersResult.users.filter(user => user.displayName === displayName);
-
-        return usersWithDisplayName;
+        matchedUsers = users.filter(user =>
+            user.displayName && inputWords.some(inputWord =>
+                user.displayName.toLowerCase().split(/\s+/).some(displayNameWord =>
+                    displayNameWord.includes(inputWord)
+                )
+            )
+        ).map(user => {
+            return { uid: user.uid, displayName: user.displayName, email: user.email };
+        });
     } catch (error) {
         console.error('Error searching users:', error);
         throw new functions.https.HttpsError('internal', 'An error occurred while searching users.');
     }
+
+    return matchedUsers;
 });

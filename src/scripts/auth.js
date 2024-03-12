@@ -23,7 +23,7 @@ export const signUP = (email, password, username) => {
             console.log(user);
 
             const sendUserInfo = httpsCallable(functions, 'sendUserInfo');
-            sendUserInfo({ displayName: user.displayName });
+            sendUserInfo({ displayName: username });
         })
         .catch((error) => {
             const errorCode = error.code;

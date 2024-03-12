@@ -57,6 +57,49 @@ exports.updateTask = functions.https.onCall(async (data, context) => {
 });
 
 
+//search for a user in collection by display name
+exports.searchUsersByDisplayName = functions.https.onCall(async (data, context) => {
+    if (!context.auth) {
+        throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    }
+    if (!data.inputValue) {
+        throw new functions.https.HttpsError('invalid-argument', 'A valid display name must be inputted.')
+    }
+
+    const inputWords = data.inputValue.toLowerCase().split(/\s+/);
+
+    try {
+        const usersRef = firestore.collection('users');
+        const snapshot = await usersRef.get();
+        let matchedUsers = [];
+
+        snapshot.forEach(doc => {
+            const userData = doc.data();
+
+            if (userData.displayName) {
+                const displayNameWords = userData.displayName.toLowerCase().split(/\s+/);
+                const isMatch = displayNameWords.some(displayNameWord =>
+                    inputWords.some(inputWord => displayNameWord.includes(inputWord))
+                );
+
+                if (isMatch) {
+                    matchedUsers.push({
+                        uid: doc.id,
+                        displayName: userData.displayName,
+                        email: userData.email
+                    });
+                }
+            }
+        });
+
+        return matchedUsers;
+    } catch (error) {
+        console.error('Error searching users in Firestore:', error);
+        throw new functions.https.HttpsError('internal', 'An error occurred while searching users in Firestore.');
+    }
+});
+
+
 
 
 //lists all friends of calling user

@@ -2,8 +2,7 @@ const functions = require('firebase-functions');
 const admin = require('../adminInit');
 
 
-//daily check for reoccuring tasks
-exports.scheduledTaskChecker = functions.pubsub.schedule('every 24 hours').onRun((context) => {
+/* exports.scheduledTaskChecker = functions.pubsub.schedule('every 24 hours').onRun((context) => {
     const now = new Date();
     const usersRef = admin.firestore().collection('tasks');
 
@@ -32,8 +31,10 @@ exports.scheduledTaskChecker = functions.pubsub.schedule('every 24 hours').onRun
                 .catch(error => console.error(`Error fetching tasks for user ${userDoc.id}: ${error}`));
         });
     }).catch(error => console.error(`Error fetching users: ${error}`));
-});
+}); */
 
+
+//hourly check for reoccuring tasks
 exports.checkRecurringTasks = functions.pubsub.schedule('every 60 minutes').onRun(async (context) => {
     const now = admin.firestore.Timestamp.now();
     

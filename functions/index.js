@@ -27,12 +27,12 @@ const {
 } = require('./auth/authCalls');
 
 const {
-    createUserDoc
+    createUserDocument
 } = require('./auth/authTriggers');
 
 
 exports.searchUsersByDisplayName = searchUsersByDisplayName;
-exports.createUserDoc = createUserDoc;
+exports.createUserDocument = createUserDocument;
 
 
 
@@ -48,7 +48,8 @@ const {
     listFriends,
     sendFriendRequest,
     acceptFriendRequest,
-    addFriendToTask
+    addFriendToTask,
+    //searchUsersByDisplayName,
 } = require('./firestore/dbCalls');
 
 const {
@@ -68,3 +69,4 @@ exports.sendFriendRequest = sendFriendRequest;
 exports.acceptFriendRequest = acceptFriendRequest;
 exports.addFriendToTask = addFriendToTask;
 exports.checkRecurringTasks = checkRecurringTasks;
+//exports.searchUsersByDisplayName = searchUsersByDisplayName;

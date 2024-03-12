@@ -1,36 +1,44 @@
 const functions = require('firebase-functions');
 const admin = require('../adminInit');
-
 const firestore = admin.firestore();
 
 
+//creates a users doc based off of their UserRecord object
+exports.createUserDocument = functions.auth.user().onCreate(async (user) => {
+    const userRef = firestore.collection('users').doc(user.uid);
+
+    try {
+        await userRef.set({
+            email: user.email,
+            displayName: user.displayName,
+            emailVerified: user.emailVerified,
+            metadata: {
+                creationTime: user.metadata.creationTime,
+            },
+        });
+
+        functions.logger.log('User created:', user.uid);
+
+        createRequestsDoc(user);
+
+        console.log(`Successfully created document for user ${user.uid}`);
+    } catch (error) {
+        console.error(`Error creating document for user ${user.uid}:`, error);
+        throw new functions.https.HttpsError('internal', `Error creating document for user ${user.uid}.`);
+    }
+});
+
+
 //created firestore doc for user on creation
-exports.createUserDoc = functions.auth.user().onCreate((user) => {
+const createRequestsDoc = (user) => {
+
     const { uid, email } = user;
 
-    //debug
-    functions.logger.log('User created:', uid, email);
-    functions.logger.log(user);
+    const requestData = {
+        ownRequests: {},
+        friendRequests: {},
+        allFriends: {},
+    };
 
-    const userRef = firestore.collection('users').doc(uid);
-
-    //create a document in the 'users' collection with user information (creates a users collection if one doesn't already exist)
-    return userRef.set({
-        email: email,
-    })
-        .then(() => {
-            const requestData = {
-                ownRequests: {},
-                friendRequests: {},
-                allFriends: {},
-            };
-
-            return firestore.collection('requests').doc(uid).set(requestData);
-        })
-        .then(() => {
-            return (firestore.collection('tasks').doc(uid).collection('created'), firestore.collection('tasks').doc(uid).collection('joined'));
-        })
-        .catch((error) => {
-            console.error(`Error upon creating user document with user id: ${uid}`, error);
-        })
-})
+    return firestore.collection('requests').doc(uid).set(requestData);
+}
