@@ -7,16 +7,20 @@ import {
   Drawer,
   Group,
   Text,
+  Menu,
+  Paper,
+  TextInput,
   Modal,
-  Menu, Paper, TextInput,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Link } from "react-router-dom";
 import { GiBrain } from "react-icons/gi";
 import { IoMdArrowDropright } from "react-icons/io";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { addTaskToFirestore, searchForTask } from "../scripts/task";
+import { checkAuthStatus, signOUT } from "../scripts/auth";
+import { auth } from "../config/firebase";
 
 const Navbar = ({ onAddTask }) => {
   const [burger, toggle] = useDisclosure();
@@ -33,12 +37,31 @@ const Navbar = ({ onAddTask }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
+  const [isUserSignedIn, setIsUserSignedIn] = useState(false);
+
+  useEffect(() => {
+    checkAuthStatus().then(({ isSignedIn, user }) => {
+      setIsUserSignedIn(isSignedIn);
+      if (isSignedIn) {
+        console.log(`User is signed in as ${user.displayName}`);
+        // You can do something with the user object here
+      } else {
+        console.log("User is not signed in");
+      }
+    });
+  }, []);
+
+  const handleLogout = async () => {
+    await signOUT(auth);
+    // Optionally handle redirection or state update after logout
+  };
+
   const handleSearch = async (event) => {
     event.preventDefault();
 
     try {
       const searchTaskResults = await searchForTask(searchTerm);
-      
+
       setSearchResults(searchTaskResults);
     } catch (error) {
       console.log(error);
@@ -119,56 +142,76 @@ const Navbar = ({ onAddTask }) => {
                   Add Friend
                 </Button>
               </Link>
-              <Link to="/login">
-                <Button variant="subtle" color="black" size={"md"}>
-                  Login
+
+              {isUserSignedIn ? (
+                <Button
+                  onClick={handleLogout}
+                  variant="subtle"
+                  color="black"
+                  size={"md"}
+                >
+                  Sign Out
                 </Button>
-              </Link>
+              ) : (
+                <Link to="/login">
+                  <Button variant="subtle" color="black" size={"md"}>
+                    Login
+                  </Button>
+                </Link>
+              )}
             </Group>
 
             <Modal
               opened={opened}
               onClose={close}
               size="xl"
-              title={<Text fw={'700'}>Add Your Task Details</Text>}
+              title={<Text fw={"700"}>Add Your Task Details</Text>}
               centered
             >
               {
                 <Paper className="sidebar">
                   <form onSubmit={handleAddClick}>
                     <TextInput
-                        label="Enter Task Name"
-                        type="text"
-                        id="event-name"
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        required
-                    />
-
-
-                    <TextInput
-                        label="Time"
-                        type="time"
-                        id="time"
-                        value={time}
-                        onChange={(e) => setTime(e.target.value)}
-                        required
+                      label="Enter Task Name"
+                      type="text"
+                      id="event-name"
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      required
                     />
 
                     <TextInput
-                        label="Day"
-                        type="date"
-                        id="day"
-                        value={date}
-                        onChange={(e) => setDate(e.target.value)}
-                        required
+                      label="Time"
+                      type="time"
+                      id="time"
+                      value={time}
+                      onChange={(e) => setTime(e.target.value)}
+                      required
                     />
 
+                    <TextInput
+                      label="Day"
+                      type="date"
+                      id="day"
+                      value={date}
+                      onChange={(e) => setDate(e.target.value)}
+                      required
+                    />
 
-                    <Menu position="right-start" withArrow arrowPosition={"center"}>
+                    <Menu
+                      position="right-start"
+                      withArrow
+                      arrowPosition={"center"}
+                    >
                       <Menu.Target>
-                        <Button mt={'15'} variant="outline" size='xs' color="Grey" rightSection={<IoMdArrowDropright/>}>
-                          <Text size='sm' fw={'700'}>
+                        <Button
+                          mt={"15"}
+                          variant="outline"
+                          size="xs"
+                          color="Grey"
+                          rightSection={<IoMdArrowDropright />}
+                        >
+                          <Text size="sm" fw={"700"}>
                             Priority
                           </Text>
                         </Button>
@@ -176,30 +219,41 @@ const Navbar = ({ onAddTask }) => {
 
                       <Menu.Dropdown>
                         <Menu.Item>
-                          <Button variant="transparent" onClick={handleClickLow}>
-                            <Text fw={'700'} color="LightGreen">Low</Text>
+                          <Button
+                            variant="transparent"
+                            onClick={handleClickLow}
+                          >
+                            <Text fw={"700"} color="LightGreen">
+                              Low
+                            </Text>
                           </Button>
-
                         </Menu.Item>
                         <Menu.Item>
-                          <Button variant="transparent" onClick={handleClickMedium}>
-                            <Text fw={'700'} color="Orange">Medium</Text>
+                          <Button
+                            variant="transparent"
+                            onClick={handleClickMedium}
+                          >
+                            <Text fw={"700"} color="Orange">
+                              Medium
+                            </Text>
                           </Button>
-
                         </Menu.Item>
                         <Menu.Item>
-                          <Button variant="transparent" onClick={handleClickHigh}>
-                            <Text fw={'700'} color="Red">High</Text>
+                          <Button
+                            variant="transparent"
+                            onClick={handleClickHigh}
+                          >
+                            <Text fw={"700"} color="Red">
+                              High
+                            </Text>
                           </Button>
-
                         </Menu.Item>
                       </Menu.Dropdown>
                     </Menu>
 
-                    <Button type="submit" mt={'40'} fullWidth>
+                    <Button type="submit" mt={"40"} fullWidth>
                       Create Task
                     </Button>
-
                   </form>
                 </Paper>
               }
