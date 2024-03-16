@@ -1,7 +1,7 @@
 .calendar-title {
-  text-align: center; 
-  margin-bottom: 20px;
-  margin-top: 40px;
-  font-size: xx-large;
-  font-variant: slashed-zero;
+  text-align: center; /* Centers the text horizontally */
+  margin-top: 80px; /* Moves the title down */
+  font-size: xx-large; /* Sets the font size to extra large */
+  font-variant: slashed-zero; /* Applies slashed zero variant to the font */
 }
+
