@@ -53,6 +53,7 @@ const Navbar = ({ onAddTask }) => {
 
   const handleLogout = async () => {
     await signOUT(auth);
+    window.location.reload(false);
     // Optionally handle redirection or state update after logout
   };
 

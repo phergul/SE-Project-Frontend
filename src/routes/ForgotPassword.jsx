@@ -7,7 +7,8 @@ import '../LoginSignup.css';
 import {Anchor, Box, Button, Center, Container, Group, Paper, rem, TextInput, Text, Title} from "@mantine/core";
 import { IconArrowLeft } from '@tabler/icons-react';
 import LoginSignup from "../Components/LogninSignup.jsx";
-
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from '../config/firebase.js';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -17,7 +18,15 @@ const ForgotPassword = () => {
   
   const handleSubmit = (event) => {
     event.preventDefault();
-   
+    
+    sendPasswordResetEmail(auth, email)
+    .then(() => {
+      setEmailSent(true);
+    })
+    .catch((error) => {
+      console.error("Error sending password reset email:", error);
+    });
+    
     setEmailSent(true);
   };
 
