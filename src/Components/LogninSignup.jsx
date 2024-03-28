@@ -29,7 +29,7 @@ const LoginSignup = () => {
       try {
         await signIN(formData.email, formData.password);
 
-        navigate("/calendar");
+        navigate("/");
       } catch (error) {
         console.error("Sign in failed:", error);
       }
@@ -37,7 +37,7 @@ const LoginSignup = () => {
       try {
         await signUP(formData.email, formData.password, formData.username);
 
-        navigate("/calendar");
+        navigate("/");
       } catch (error) {
         console.error("Sign up failed:", error);
       }

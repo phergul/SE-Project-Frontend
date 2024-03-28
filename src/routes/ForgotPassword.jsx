@@ -26,7 +26,7 @@ const ForgotPassword = () => {
     .catch((error) => {
       console.error("Error sending password reset email:", error);
     });
-    
+
     setEmailSent(true);
   };
 
